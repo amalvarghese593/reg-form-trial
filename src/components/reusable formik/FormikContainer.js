@@ -10,7 +10,7 @@ import axios from "axios";
 
 function FormikContainer() {
   const arr = [<Personal />, <Education />, <Professional />];
-  const [pageNumber, setPageNumber] = useState(2);
+  const [pageNumber, setPageNumber] = useState(0);
   const initialValues = {
     firstName: "",
     middleName: "",
@@ -74,7 +74,7 @@ function FormikContainer() {
     dob: Yup.date().required("Required").nullable(),
     gender: Yup.string().required("Required"),
     primaryContactNumber: Yup.number()
-      .max(9999999999, "Max 10 digits allowed")
+      .max(9999999999, "Maximum 10 digits allowed")
       .min(1000000000, "10 digits required")
       .typeError("Must be a Number")
       .required("Required"),
@@ -150,8 +150,8 @@ function FormikContainer() {
     // locations: Yup.string().required("Required"),
   });
   const onSubmit = (values, onSubmitProps) => {
-    console.log("Form data", values);
-    // alert("Form submitted successfully");
+    // console.log("Form data", values);
+    alert("Form submitted successfully");
     const formData = new FormData();
     for (const key in values) {
       formData.append(key, values[key]);
@@ -177,7 +177,7 @@ function FormikContainer() {
   return (
     <Formik {...{ initialValues, validationSchema, onSubmit }}>
       {(formik) => {
-        const { validateForm, setTouched, errors, touched } = formik;
+        const { validateForm, setTouched, errors, touched, isValid } = formik;
         const nextButtonHandler = () => {
           if (pageNumber === 0) {
             setTouched({
@@ -249,12 +249,12 @@ function FormikContainer() {
             return true;
           };
           isEnable = enableButton();
-          // if (isEnable) {
-          //   setPageNumber((prev) => prev + 1);
-          // }
-          if (true) {
+          if (isEnable) {
             setPageNumber((prev) => prev + 1);
           }
+          // if (true) {
+          //   setPageNumber((prev) => prev + 1);
+          // }
         };
         return (
           <Form className="container p-3 my-5 rounded border w-50 text-start">

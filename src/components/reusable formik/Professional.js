@@ -48,7 +48,7 @@ export const Professional = () => {
                         type="number"
                         className="form-control col"
                         name={`skills[${index}].experience`}
-                        placeholder="Experience"
+                        placeholder="Experience in Years"
                       />
                       <button
                         style={{ opacity: index ? "1" : "0" }}

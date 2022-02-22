@@ -45,7 +45,7 @@ export const ResumeUpload = () => {
                 }}
                 className="border p-3"
                 type="file"
-                accept="image/png, .png, .pdf, application/pdf, .doc, .docx, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                accept=".pdf, application/pdf, .doc, .docx, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
               />
             );
           }}

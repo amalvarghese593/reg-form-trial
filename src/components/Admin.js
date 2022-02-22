@@ -33,6 +33,21 @@ export const Admin = () => {
     numArr.push(i);
   }
 
+  const resumeDownloadHandler = (e) => {
+    const resumeFilePath = e.target.dataset.resume;
+    const fetchResume = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:1337/${resumeFilePath}`
+        );
+        console.log("resume: ", response.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchResume();
+  };
+
   return (
     <div>
       <h2>Admin</h2>
@@ -65,6 +80,7 @@ export const Admin = () => {
               <th scope="col">Company</th>
               <th scope="col">Role</th>
               <th scope="col">Location</th>
+              <th scope="col">Resume</th>
             </tr>
           </thead>
           <tbody>
@@ -77,6 +93,15 @@ export const Admin = () => {
                 <td>{user.currentCompanyName}</td>
                 <td>{user.currentDesignation}</td>
                 <td>{user.currentLocation}</td>
+                <td>
+                  <button
+                    className="btn btn-outline-dark"
+                    data-resume={user.resumeFile}
+                    onClick={resumeDownloadHandler}
+                  >
+                    Download
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
