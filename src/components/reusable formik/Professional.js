@@ -3,28 +3,41 @@ import { FormikControl } from "./FormikControl";
 import { ResumeUpload } from "./ResumeUpload";
 import { FieldArray, Field } from "formik";
 
-export const Professional = () => {
+export const Professional = ({ fresher }) => {
+  const fresherOptions = [
+    { key: "Yes", value: "yes" },
+    { key: "No", value: "no" },
+  ];
+  console.log("professional props: ", { fresher });
   return (
     <div>
-      <label htmlFor="company" className="mb-3">
-        Current Company
-      </label>
-      <div id="company" className="row">
-        <div className="col">
-          <FormikControl
-            control="input"
-            type="text"
-            name="currentCompanyName"
-            placeholder="Company Name"
-          />
-        </div>
-        <div className="col">
-          <FormikControl
-            control="input"
-            type="text"
-            name="currentDesignation"
-            placeholder="Designation"
-          />
+      <FormikControl
+        control="radio"
+        name="fresher"
+        label="Are you a Fresher?"
+        options={fresherOptions}
+      />
+      <div hidden={!(fresher === "no")}>
+        <label htmlFor="company" className="mb-3">
+          Current Company
+        </label>
+        <div id="company" className="row">
+          <div className="col">
+            <FormikControl
+              control="input"
+              type="text"
+              name="currentCompanyName"
+              placeholder="Company Name"
+            />
+          </div>
+          <div className="col">
+            <FormikControl
+              control="input"
+              type="text"
+              name="currentDesignation"
+              placeholder="Designation"
+            />
+          </div>
         </div>
       </div>
       <label className="mb-3">Skills</label>
@@ -86,7 +99,7 @@ export const Professional = () => {
           }}
         </FieldArray>
       </div>
-      <div className="row g-3">
+      <div className="row g-3" hidden={!(fresher === "no")}>
         <div className="col-auto pt-2">
           <label>Total Experience</label>
         </div>

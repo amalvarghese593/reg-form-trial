@@ -1,20 +1,19 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import "table2excel";
+// import "table2excel";
+import { useDownload } from "./hooks/useDownload";
 
 export const Admin = () => {
-  const Table2Excel = window.Table2Excel;
-  const table2excel = new Table2Excel();
-  const downloadHandler = () => {
-    table2excel.export(document.querySelectorAll("table"));
-  };
-
+  // const Table2Excel = window.Table2Excel;
+  // const table2excel = new Table2Excel();
+  // const downloadHandler = () => {
+  //   table2excel.export(document.querySelectorAll("table"));
+  // };
   const [userData, setUserData] = useState([]);
   useEffect(() => {
     const fetch = async () => {
       try {
         const response = await axios.get("http://localhost:1337/admin");
-        console.log("admin data: ", response /* .data */);
         setUserData(response.data);
       } catch (error) {
         console.log(error);
@@ -32,26 +31,10 @@ export const Admin = () => {
   for (let i = 1; i < no + 1; i++) {
     numArr.push(i);
   }
-
-  const resumeDownloadHandler = (e) => {
-    const resumeFilePath = e.target.dataset.resume;
-    const fetchResume = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:1337/${resumeFilePath}`
-        );
-        console.log("resume: ", response.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchResume();
-  };
-
+  const { fileDownloadHandler } = useDownload();
   return (
     <div>
       <h2>Admin</h2>
-
       <div className="container w-75">
         <div className="container d-flex align-items-center p-3 text-start">
           <label htmlFor="postsCount">Posts per page:</label>
@@ -66,7 +49,10 @@ export const Admin = () => {
             <option value="20">20</option>
             <option value="30">30</option>
           </select>
-          <button className="btn btn-success ms-auto" onClick={downloadHandler}>
+          <button
+            className="btn btn-success ms-auto"
+            onClick={() => fileDownloadHandler("report/report.csv", "report")}
+          >
             Export Data to Excel
           </button>
         </div>
@@ -96,8 +82,10 @@ export const Admin = () => {
                 <td>
                   <button
                     className="btn btn-outline-dark"
-                    data-resume={user.resumeFile}
-                    onClick={resumeDownloadHandler}
+                    data-resumepath={user.resumeFile}
+                    onClick={(e) =>
+                      fileDownloadHandler(e.target.dataset.resumepath, "resume")
+                    }
                   >
                     Download
                   </button>

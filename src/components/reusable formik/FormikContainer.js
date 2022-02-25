@@ -9,8 +9,7 @@ import { Professional } from "./Professional";
 import axios from "axios";
 
 function FormikContainer() {
-  const arr = [<Personal />, <Education />, <Professional />];
-  const [pageNumber, setPageNumber] = useState(0);
+  const [pageNumber, setPageNumber] = useState(2);
   const initialValues = {
     firstName: "",
     middleName: "",
@@ -54,6 +53,7 @@ function FormikContainer() {
     tenthPercentage: "",
     tenthUniName: "",
     tenthSchoolName: "",
+    fresher: "",
     currentCompanyName: "",
     currentDesignation: "",
     skills: [
@@ -82,13 +82,26 @@ function FormikContainer() {
       .max(9999999999, "Max 10 digits allowed")
       .min(1000000000, "10 digits required")
       .typeError("Must be a Number")
-      .required("Required")
-      .notOneOf([Yup.ref("primaryContactNumber")], "Use another number"),
+      .test(
+        "secondaryContactNumber",
+        "Use another number",
+        (val) =>
+          !(
+            Yup.ref("primaryContactNumber") &&
+            val === Yup.ref("primaryContactNumber")
+          )
+      ),
+    // .notOneOf([Yup.ref("primaryContactNumber")], "Use another number"),
     primaryEmailId: Yup.string().email("Invalid Email").required("Required"),
     secondaryEmailId: Yup.string()
       .email("Invalid Email")
-      .required("Required")
-      .notOneOf([Yup.ref("primaryEmailId")], "Use another Email"),
+      .test(
+        "secondaryEmailId",
+        "Use another Email",
+        (val) =>
+          !(Yup.ref("primaryEmailId") && val === Yup.ref("primaryEmailId"))
+      ),
+    // .notOneOf([Yup.ref("primaryEmailId")], "Use another Email"),
     fatherFirstName: Yup.string().required("Required"),
     fatherMiddleName: Yup.string(),
     fatherLastName: Yup.string().required("Required"),
@@ -126,7 +139,13 @@ function FormikContainer() {
     tenthPercentage: Yup.number().required("Required"),
     tenthUniName: Yup.string().required("Required"),
     tenthSchoolName: Yup.string().required("Required"),
-    currentCompanyName: Yup.string().required("Required"),
+    fresher: Yup.string().required("Required"),
+    // currentCompanyName: Yup.string().required("Required"),
+    currentCompanyName: Yup.string().test(
+      "currentCompanyName",
+      "Requiredddd",
+      (val) => Yup.ref("fresher") === "yes"
+    ),
     currentDesignation: Yup.string().required("Required"),
     skills: Yup.array().of(
       Yup.object({
@@ -177,7 +196,13 @@ function FormikContainer() {
   return (
     <Formik {...{ initialValues, validationSchema, onSubmit }}>
       {(formik) => {
-        const { validateForm, setTouched, errors, touched, isValid } = formik;
+        const { validateForm, setTouched, errors, touched, isValid, values } =
+          formik;
+        const arr = [
+          <Personal />,
+          <Education />,
+          <Professional fresher={values.fresher} />,
+        ];
         const nextButtonHandler = () => {
           if (pageNumber === 0) {
             setTouched({
@@ -252,9 +277,6 @@ function FormikContainer() {
           if (isEnable) {
             setPageNumber((prev) => prev + 1);
           }
-          // if (true) {
-          //   setPageNumber((prev) => prev + 1);
-          // }
         };
         return (
           <Form className="container p-3 my-5 rounded border w-50 text-start">

@@ -7,7 +7,7 @@ export const Education = () => {
   const arrMasters = MASTERS.slice();
   arrMasters.splice(0, 0, mastersPlaceholder);
 
-  const bachelorsPlaceholder = "-- Select Bachelors --";
+  const bachelorsPlaceholder = "-- Select Bachelors/Diploma --";
   const arrBachelors = BACHELORS.slice();
   arrBachelors.splice(0, 0, bachelorsPlaceholder);
 
@@ -73,7 +73,7 @@ export const Education = () => {
         </div>
       </div>
       <label htmlFor="gradFields" className="mb-3">
-        Graduation
+        Graduation / Diploma
       </label>
       <div id="gradFields" className="row">
         <div className="col">
