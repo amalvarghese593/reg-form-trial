@@ -9,7 +9,7 @@ import { Professional } from "./Professional";
 import axios from "axios";
 
 function FormikContainer() {
-  const [pageNumber, setPageNumber] = useState(2);
+  const [pageNumber, setPageNumber] = useState(0);
   const initialValues = {
     firstName: "",
     middleName: "",
@@ -53,7 +53,7 @@ function FormikContainer() {
     tenthPercentage: "",
     tenthUniName: "",
     tenthSchoolName: "",
-    fresher: "",
+    isFresher: "",
     currentCompanyName: "",
     currentDesignation: "",
     skills: [
@@ -139,21 +139,25 @@ function FormikContainer() {
     tenthPercentage: Yup.number().required("Required"),
     tenthUniName: Yup.string().required("Required"),
     tenthSchoolName: Yup.string().required("Required"),
-    fresher: Yup.string().required("Required"),
-    // currentCompanyName: Yup.string().required("Required"),
-    currentCompanyName: Yup.string().test(
-      "currentCompanyName",
-      "Requiredddd",
-      (val) => Yup.ref("fresher") === "yes"
-    ),
-    currentDesignation: Yup.string().required("Required"),
+    isFresher: Yup.string().required("Required"),
+    currentCompanyName: Yup.string().when("isFresher", {
+      is: "no",
+      then: Yup.string().required("Required"),
+    }),
+    currentDesignation: Yup.string().when("isFresher", {
+      is: "no",
+      then: Yup.string().required("Required"),
+    }),
     skills: Yup.array().of(
       Yup.object({
         skill: Yup.string().required("Required"),
         experience: Yup.number().required("Required"),
       })
     ),
-    totalExperience: Yup.number().required("Required"),
+    totalExperience: Yup.number().when("isFresher", {
+      is: "no",
+      then: Yup.number().required("Required"),
+    }),
     additionalCourses: Yup.string().required("Required"),
     summary: Yup.string()
       .min(20, "Min 20 characters required")
@@ -166,7 +170,6 @@ function FormikContainer() {
         "File size should be less than 1 MB",
         (val) => val && val.size <= 10 ** 6
       ),
-    // locations: Yup.string().required("Required"),
   });
   const onSubmit = (values, onSubmitProps) => {
     // console.log("Form data", values);
@@ -196,10 +199,21 @@ function FormikContainer() {
   return (
     <Formik {...{ initialValues, validationSchema, onSubmit }}>
       {(formik) => {
-        const { validateForm, setTouched, errors, touched, isValid, values } =
-          formik;
+        const {
+          validateForm,
+          setTouched,
+          errors,
+          touched,
+          isValid,
+          values,
+          setFieldValue,
+          setFieldTouched,
+        } = formik;
         const arr = [
-          <Personal />,
+          <Personal
+            setFieldValue={setFieldValue}
+            setFieldTouched={setFieldTouched}
+          />,
           <Education />,
           <Professional fresher={values.fresher} />,
         ];

@@ -1,7 +1,8 @@
 import React from "react";
+import { LocationDropdwon } from "../LocationDropdwon";
 import { FormikControl } from "./FormikControl";
 
-export const Personal = () => {
+export const Personal = ({ setFieldValue, setFieldTouched }) => {
   const genderOptions = [
     { key: "Male", value: "male" },
     { key: "Female", value: "female" },
@@ -165,21 +166,31 @@ export const Personal = () => {
       </label>
       <div id="location" className="row">
         <div className="col">
-          <FormikControl
+          {/* <FormikControl
             control="input"
             name="currentLocation"
             label=""
             placeholder="Current Location"
             type="text"
+          /> */}
+          <LocationDropdwon
+            name="currentLocation"
+            setFieldValue={setFieldValue}
+            setFieldTouched={setFieldTouched}
           />
         </div>
         <div className="col">
-          <FormikControl
+          {/* <FormikControl
             control="input"
             name="preferredLocation"
             label=""
             placeholder="Preferred Location"
             type="text"
+          /> */}
+          <LocationDropdwon
+            name="preferredLocation"
+            setFieldValue={setFieldValue}
+            setFieldTouched={setFieldTouched}
           />
         </div>
       </div>

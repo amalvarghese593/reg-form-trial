@@ -8,7 +8,7 @@ export const Professional = ({ fresher }) => {
     { key: "Yes", value: "yes" },
     { key: "No", value: "no" },
   ];
-  console.log("professional props: ", { fresher });
+  // console.log("professional props: ", { fresher });
   return (
     <div>
       <FormikControl

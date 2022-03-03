@@ -1,5 +1,4 @@
 export const locations = [
-  "Select Location",
   "Mumbai",
   "Delhi",
   "Bangalore",
